@@ -1,4 +1,4 @@
-//META{"name":"ChannelsBadges","invite":"GWYNKpbunT","source":"https://github.com/SheiylaDev/ChannelsBadges/blob/main/ChannelsBadges.plugin.js","updateUrl":"https://raw.githubusercontent.com/SheiylaDev/ChannelsBadges/main/ChannelsBadges.plugin.js"}*//
+//META{"name":"ChannelsBadges","invite":"GWYNKpbunT","donate":"https://www.paypal.com/paypalme/Sheiylanie","website":"https://revgames.tech/","source":"https://github.com/SheiylaDev/ChannelsBadges/blob/main/ChannelsBadges.plugin.js","updateUrl":"https://raw.githubusercontent.com/SheiylaDev/ChannelsBadges/main/ChannelsBadges.plugin.js"}*//
 
 class ChannelsBadges 
 {  

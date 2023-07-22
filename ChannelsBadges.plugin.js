@@ -1,4 +1,4 @@
-//META{"name":"ChannelsBadges","invite":"GWYNKpbunT","donate":"https://www.paypal.com/paypalme/Sheiylanie","website":"https://revgames.tech/","source":"https://github.com/SheiylaDev/ChannelsBadges/blob/main/ChannelsBadges.plugin.js","updateUrl":"https://raw.githubusercontent.com/SheiylaDev/ChannelsBadges/main/ChannelsBadges.plugin.js"}*//
+//META{"name":"ChannelsBadges","version":"1.0.0","invite":"GWYNKpbunT","donate":"https://www.paypal.com/paypalme/Sheiylanie","website":"https://revgames.tech/","source":"https://github.com/SheiylaDev/ChannelsBadges/blob/main/ChannelsBadges.plugin.js","updateUrl":"https://raw.githubusercontent.com/SheiylaDev/ChannelsBadges/main/ChannelsBadges.plugin.js"}*//
 
 class ChannelsBadges 
 {  
@@ -14,23 +14,112 @@ class ChannelsBadges
     getVersion() { return "1.0.0"; }
     getAuthor() { return "Sheiylanie"; }
 
+    load() 
+    {
+        this.loadSettings();
+        if(!this.settings.StyleEnabled)
+        {
+            this.injectCSS(); 
+            BdApi.saveData(this.getName(), "settings", this.settings);
+        }
+    }
+
     start() 
     {
-        this.injectCSS();
         this.tagChannels();
         this.setupObserver();
     }
 
     stop() 
     {
-        this.voiceCBTags.forEach(tag => tag.remove());
-        this.voiceCBTags = [];
-        this.forumCBTags.forEach(tag => tag.remove());
-        this.forumCBTags = [];
-        this.nsfwCBTags.forEach(tag => tag.remove());
-        this.nsfwCBTags = [];
-        this.removeCSS();
+        const voiceTags = document.querySelectorAll(".voiceTags-2408cb");
+        const forumTags = document.querySelectorAll(".forumTags-2408cb");
+        const nsfwTags  = document.querySelectorAll(".nsfwTags-2408cb");
+        voiceTags.forEach(tag => 
+        {
+            this.voiceCBTags.forEach(tag => tag.remove());
+            this.voiceCBTags = [];
+            tag.style.display = this.settings.voiceTagEnabled ? "block" : "none";
+        });
+        forumTags.forEach(tag => 
+        {
+            this.forumCBTags.forEach(tag => tag.remove());
+            this.forumCBTags = [];
+            tag.style.display = this.settings.forumTagEnabled ? "block" : "none";
+        });
+        nsfwTags.forEach(tag => 
+        {
+            this.nsfwCBTags.forEach(tag => tag.remove());
+            this.nsfwCBTags = [];
+            tag.style.display = this.settings.nsfwTagEnabled ? "block" : "none";
+        });
         this.disconnectObserver();
+    }
+
+    getSettingsPanel() {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = `
+            <div class="setting-item">
+                <div class="setting-description"><div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv voiceTags-2409cb" style="width: 70px;">VOICE</div></div>
+                <label class="setting-switch">
+                    <input type="checkbox" id="voiceTagSetting" ${this.settings.voiceTagEnabled ? "checked" : ""}>
+                    <span class="setting-slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <div class="setting-description"><div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv forumTags-2409cb" style="width: 70px;">FORUM</div></div>
+                <label class="setting-switch">
+                    <input type="checkbox" id="forumTagSetting" ${this.settings.forumTagEnabled ? "checked" : ""}>
+                    <span class="setting-slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <div class="setting-description"><div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv nsfwTags-2409cb" style="width: 70px;">NSFW</div></div>
+                <label class="setting-switch">
+                    <input type="checkbox" id="nsfwTagSetting" ${this.settings.nsfwTagEnabled ? "checked" : ""}>
+                    <span class="setting-slider"></span>
+                </label>
+            </div>
+        `;
+        const voiceTagSetting = wrapper.querySelector("#voiceTagSetting");
+        const forumTagSetting = wrapper.querySelector("#forumTagSetting");
+        const nsfwTagSetting  = wrapper.querySelector("#nsfwTagSetting");
+        voiceTagSetting.addEventListener("change", (event) => 
+        {
+            this.settings.voiceTagEnabled = event.target.checked;
+            BdApi.saveData(this.getName(), "settings", this.settings);
+            this.voiceCBTags.forEach(tag => tag.remove());
+            this.voiceCBTags = [];
+            this.tagChannels();
+        });
+        forumTagSetting.addEventListener("change", (event) => 
+        {
+            this.settings.forumTagEnabled = event.target.checked;
+            BdApi.saveData(this.getName(), "settings", this.settings);
+            this.forumCBTags.forEach(tag => tag.remove());
+            this.forumCBTags = [];
+            this.tagChannels();
+        });
+        nsfwTagSetting.addEventListener("change", (event) => 
+        {
+            this.settings.nsfwTagEnabled = event.target.checked;
+            BdApi.saveData(this.getName(), "settings", this.settings);
+            this.nsfwCBTags.forEach(tag => tag.remove());
+            this.nsfwCBTags = [];
+            this.tagChannels();
+        });
+        return wrapper;
+    }
+
+    loadSettings() 
+    {
+        this.settings = BdApi.loadData(this.getName(), "settings") || 
+        { 
+            voiceTagEnabled: true, 
+            forumTagEnabled: true,
+            nsfwTagEnabled: true,
+            StyleEnabled: false 
+        };
     }
 
     injectCSS() 
@@ -47,13 +136,19 @@ class ChannelsBadges
             .nsfwTags-2408cb                                              { margin-left: 2px; }
             .iconVisibility-vptxma.wrapper-NhbLHG:hover .nsfwTags-2408cb  { display: none; }
             .nsfwTags-2409cb                                              { background-color: var(--status-danger); border-radius: 3px; }
+            .setting-item { display: flex; align-items: center; margin: 20px 0; }
+            .setting-description { color: white; flex: 1; }
+            .setting-switch { position: relative; display: inline-block; width: 42px; height: 24px; }
+            .setting-switch input { opacity: 0; width: 0; height: 0; }
+            .setting-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; -webkit-transition: .4s; transition: .4s; border-radius: 24px; }
+            .setting-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%; }
+            input:checked + .setting-slider { background-color: #2196F3; }
+            input:focus + .setting-slider { box-shadow: 0 0 1px #2196F3; }
+            input:checked + .setting-slider:before { -webkit-transform: translateX(18px); -ms-transform: translateX(18px); transform: translateX(18px); }
+            .setting-slider.round { border-radius: 24px; }
+            .setting-slider.round:before { border-radius: 50%; }
         `;
         document.head.append(style);
-    }
-
-    removeCSS() {
-        const styleElement = document.querySelector('#ChannelsTagsStyle');
-        if (styleElement) styleElement.remove();
     }
 
     tagChannels() 
@@ -72,7 +167,7 @@ class ChannelsBadges
             const isAlreadyVoice = item.querySelector('.voiceTags-2408cb');
             const isAlreadyForum = item.querySelector('.forumTags-2408cb');
             const isAlreadynsfw  = item.querySelector('.nsfwTags-2408cb');
-            if (svgElement && !isAlreadyVoice) 
+            if (svgElement && !isAlreadyVoice && this.settings.voiceTagEnabled) 
             {
                 if (svgElement.innerHTML.includes(VOICE) || svgElement.innerHTML.includes(VOICE_Limited)) 
                 {
@@ -87,7 +182,7 @@ class ChannelsBadges
                     }
                 }
             }
-            if (svgElement && !isAlreadyForum) 
+            if (svgElement && !isAlreadyForum && this.settings.forumTagEnabled) 
             {
                 if (svgElement.innerHTML.includes(FORUM) || svgElement.innerHTML.includes(FORUM_Limited)) 
                 {
@@ -102,7 +197,7 @@ class ChannelsBadges
                     }
                 }
             }
-            if (svgElement && !isAlreadynsfw) 
+            if (svgElement && !isAlreadynsfw && this.settings.nsfwTagEnabled) 
             {
                 if (svgElement.innerHTML.includes(NSFW) && svgElement.innerHTML.includes(NSFW_Limited)) 
                 {

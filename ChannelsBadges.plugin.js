@@ -1,4 +1,14 @@
-//META{"name":"ChannelsBadges","version":"1.0.0","invite":"GWYNKpbunT","donate":"https://www.paypal.com/paypalme/Sheiylanie","website":"https://revgames.tech/","source":"https://github.com/SheiylaDev/ChannelsBadges/blob/main/ChannelsBadges.plugin.js","updateUrl":"https://raw.githubusercontent.com/SheiylaDev/ChannelsBadges/main/ChannelsBadges.plugin.js"}*//
+/**
+ * @name ChannelsBadges
+ * @author Sheiylanie
+ * @description Add Voice | Forum | Nsfw badges to channels.
+ * @version 1.0.0
+ * @invite GWYNKpbunT
+ * @donate https://www.paypal.com/paypalme/Sheiylanie
+ * @website https://revgames.tech/
+ * @source https://github.com/SheiylaDev/ChannelsBadges/blob/main/ChannelsBadges.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/SheiylaDev/ChannelsBadges/main/ChannelsBadges.plugin.js
+ */
 
 class ChannelsBadges 
 {  

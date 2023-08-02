@@ -354,9 +354,6 @@ class ChannelsBadges {
             return label;
         };
         wrapper.appendChild(createTitle("⚙️ Badge Lists"));
-
-
-
         const settingsTableHeaders = document.createElement("div");
         settingsTableHeaders.innerHTML = `
         <div style="display: flex; justify-content: flex-end; margin-bottom: -15px; margin-right: 25px;">
@@ -372,36 +369,10 @@ class ChannelsBadges {
         </div>
         `;
         wrapper.appendChild(settingsTableHeaders);
-
-
-
-
-
-
         checkboxes1.forEach(checkbox => {
             const settingItem = createSettingItem(checkbox);
             wrapper.appendChild(settingItem);
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         wrapper.appendChild(createTitle("⚙️ Icons Lists"));
         checkboxes2.forEach(checkbox => {
             const settingItem = createSettingItem(checkbox);

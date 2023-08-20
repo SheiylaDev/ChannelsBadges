@@ -3,7 +3,7 @@
  * @author Sheiylanie
  * @authorId 183948625368317952
  * @description Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
- * @version 1.1.1
+ * @version 1.1.2
  * @invite GWYNKpbunT
  * @donate https://www.paypal.com/paypalme/Sheiylanie
  * @website https://revgames.tech/
@@ -26,7 +26,7 @@ class ChannelsBadges {
 
     /* Settings */
     settings = {
-        version: "1.1.1",
+        version: "1.1.2",
         emoji: { emoji: true },
         voice: { voice: true, voice_color: "#1ABC9C" },
         forum: { forum: true, forum_color: "#206694" },
@@ -128,7 +128,7 @@ class ChannelsBadges {
         const previousVersion = BdApi.Data.load(this.meta.name, "settings").version;
         const ModalComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("ModalRoot"));
         const ModalActions = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("openModal", "updateModal"));
-        const changelogs = `Fix meta to constructor`;
+        const changelogs = `Reset color fix not working`;
         if (sys) {
             if (previousVersion && currentVersion !== previousVersion) this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs);
         } else {
@@ -316,7 +316,8 @@ class ChannelsBadges {
             colorPickerContainer.appendChild(colorPickerButton);
             settingItem.appendChild(settingDescription);
             resetEmoji.addEventListener("click", () => {
-                this.settings[checkbox.setting + "_color"] = this.settings[checkbox.setting][checkbox.setting + "_color"];
+                const defaultSettings = { voice: "#1ABC9C", forum: "#206694", nsfw: "#F23F42", rule: "#FF9B2B", ads: "#FF2BC2" };
+                this.settings[checkbox.setting][checkbox.setting + "_color"] = defaultSettings[checkbox.setting];
                 BdApi.Data.save(this.meta.name, "settings", this.settings);
                 this.updateCSS();
                 this.reloadTags();

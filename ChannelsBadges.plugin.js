@@ -3,7 +3,7 @@
  * @author Sheiylanie
  * @authorId 183948625368317952
  * @description Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
- * @version 1.0.8
+ * @version 1.1.0
  * @invite GWYNKpbunT
  * @donate https://www.paypal.com/paypalme/Sheiylanie
  * @website https://revgames.tech/
@@ -14,7 +14,7 @@
 class ChannelsBadges {
     getName() { return "ChannelsBadges"; }
     getDescription() { return "Add Voice | Forum | Nsfw | Rule | Ads badges to channels."; }
-    getVersion() { return "1.0.8"; }
+    getVersion() { return "1.1.0"; }
     getAuthor() { return "Sheiylanie"; }
 
     /* Plugin Start */
@@ -28,24 +28,65 @@ class ChannelsBadges {
     }
 
     /* Settings */
-    defaultSettings = {
-        version: "1.0.8",
-        emoji: true,
-        voice: true,
-        voice_color: "#1ABC9C",
-        forum: true,
-        forum_color: "#206694",
-        nsfw: true,
-        nsfw_color: "#F23F42",
-        rule: true,
-        rule_color: "#FF9B2B",
-        ads: true,
-        ads_color: "#FF2BC2"
+    settings = {
+        version: "1.1.0",
+        emoji: { emoji: true },
+        voice: { voice: true, voice_color: "#1ABC9C" },
+        forum: { forum: true, forum_color: "#206694" },
+        nsfw: { nsfw: true, nsfw_color: "#F23F42" },
+        rule: { rule: true, rule_color: "#FF9B2B" },
+        ads: { ads: true, ads_color: "#FF2BC2" }
     };
-    loadSettings() { this.settings = BdApi.loadData(this.getName(), 'settings') || this.defaultSettings; }
-    saveSettings() { BdApi.saveData(this.getName(), 'settings', this.settings); }
 
-    modalVersion(currentVersion, previousVersion, ModalComponents, ModalActions, changelogs) {
+    loadSettings() {
+        this.settings = BdApi.Data.load(this.getName(), "settings") || this.settings;
+    }
+
+    saveSettings() {
+        BdApi.Data.save(this.getName(), "settings", this.settings);
+    }
+
+    /* Plugin Stop */
+    stop() {
+        const stylesToRemove = ['CSS_SettingsPanel',];
+        stylesToRemove.forEach(styleId => { const styleElement = document.getElementById(styleId); if (styleElement) styleElement.remove(); });
+        const tagClasses = ['voiceTags-2408cb', 'forumTags-2408cb', 'nsfwTags-2408cb', 'ruleTags-2408cb', 'adsTags-2408cb'];
+        tagClasses.forEach(tagClass => { const elements = document.querySelectorAll(`.${tagClass}`); elements.forEach(element => { element.parentNode.removeChild(element); }); });
+        this.disconnectObserver();
+    }
+
+    /* CSS */
+    addCSS() {
+        const commonCSS = `.setting-item { display: flex; align-items: center; margin: 20px 0; } .setting-description { color: white; flex: 1; } .setting-switch { position: relative; display: inline-block; width: 42px; height: 24px; } .setting-switch input { opacity: 0; width: 0; height: 0; } .setting-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; -webkit-transition: .4s; transition: .4s; border-radius: 24px; } .setting-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%; } input:checked + .setting-slider { background-color: #2196F3; } input:focus + .setting-slider { box-shadow: 0 0 1px #2196F3; } input:checked + .setting-slider:before { -webkit-transform: translateX(18px); -ms-transform: translateX(18px); transform: translateX(18px); } .setting-slider.round { border-radius: 24px; } .setting-slider.round:before { border-radius: 50%; } `;
+        if (!document.getElementById('CSS_SettingsPanel')) {
+            let style = document.createElement('style');
+            style.id = 'CSS_SettingsPanel';
+            style.innerHTML = commonCSS;
+            document.head.appendChild(style);
+        }
+        const tags = [{ setting: "voice", className: "voiceTags", colorSetting: "voice_color" }, { setting: "forum", className: "forumTags", colorSetting: "forum_color" }, { setting: "nsfw", className: "nsfwTags", colorSetting: "nsfw_color" }, { setting: "rule", className: "ruleTags", colorSetting: "rule_color" }, { setting: "ads", className: "adsTags", colorSetting: "ads_color" },];
+        tags.forEach(tag => {
+            if (this.settings[tag.setting] && !document.getElementById(`CSS_${tag.setting}`)) {
+                let style = document.createElement('style');
+                style.id = `CSS_${tag.setting}`;
+                style.innerHTML = `.${tag.className}-2408cb { margin-left: 2px; } .iconVisibility-vptxma.wrapper-NhbLHG:hover .${tag.className}-2408cb { display: none; } .${tag.className}-2409cb { background-color: ${this.settings[tag.setting][tag.colorSetting]}; border-radius: 3px; }`;
+                document.head.appendChild(style);
+            }
+        });
+    }
+
+    updateCSS() {
+        const tags = [{ setting: "voice", className: "voiceTags", colorSetting: "voice_color" }, { setting: "forum", className: "forumTags", colorSetting: "forum_color" }, { setting: "nsfw", className: "nsfwTags", colorSetting: "nsfw_color" }, { setting: "rule", className: "ruleTags", colorSetting: "rule_color" }, { setting: "ads", className: "adsTags", colorSetting: "ads_color" },];
+        tags.forEach(tag => {
+            let style = document.getElementById(`CSS_${tag.setting}`);
+            if (style && this.settings[tag.setting]) {
+                style.innerHTML = `.${tag.className}-2408cb { margin-left: 2px; } .iconVisibility-vptxma.wrapper-NhbLHG:hover .${tag.className}-2408cb { display: none; } .${tag.className}-2409cb { background-color: ${this.settings[tag.setting][tag.colorSetting]}; border-radius: 3px; }`;
+            }
+        });
+    }
+
+    /* Changelogs */
+    modalVersion(currentVersion, ModalComponents, ModalActions, changelogs) {
         const MyModal = (closeCallback) => {
             return BdApi.React.createElement(ModalComponents.ModalRoot, {
                 transitionState: 1,
@@ -82,104 +123,86 @@ class ChannelsBadges {
         };
         ModalActions.openModal((props) => { return MyModal(props.onClose); });
         this.settings['version'] = currentVersion;
-        BdApi.saveData(this.getName(), "settings", this.settings);
+        BdApi.Data.save(this.getName(), "settings", this.settings);
     }
 
     checkVersion(sys) {
         const currentVersion = this.getVersion();
-        const previousVersion = BdApi.loadData(this.getName(), 'settings').version;
-        const ModalComponents = BdApi.findModuleByProps('ModalRoot');
-        const ModalActions = BdApi.findModuleByProps("openModal", "updateModal");
-        const changelogs = `New changelog modal added.
-        Restructuring settings panel`;
+        const previousVersion = BdApi.Data.load(this.getName(), "settings").version;
+        const ModalComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("ModalRoot"));
+        const ModalActions = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("openModal", "updateModal"));
+        const changelogs = `Fix Deprecated Api`;
         if (sys) {
-            if (previousVersion && currentVersion !== previousVersion) this.modalVersion(currentVersion, previousVersion, ModalComponents, ModalActions, changelogs);
+            if (previousVersion && currentVersion !== previousVersion) this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs);
         } else {
-            this.modalVersion(currentVersion, previousVersion, ModalComponents, ModalActions, changelogs);
+            this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs);
         }
     }
 
-    /* Plugin Stop */
-    stop() {
-        const stylesToRemove = [
-            'CSS_SettingsPanel',
+    /* Tags */
+    AddtagChannels() {
+        const VOICE = "M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z";
+        const VOICE_CUT = "M15 12C15 12.0007 15 12.0013 15 12.002C15 12.553 14.551 13.002 14 13.002V15.002C15.654 15.002 17 13.657 17 12.002C17 12.0013 17 12.0007 17 12H15ZM19 12C19 12.0007 19 12.0013 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 12.0013 21 12.0007 21 12H19ZM10.293 3.29604C10.579 3.01004 11.009 2.92504 11.383 3.07904C11.757 3.23204 12 3.59904 12 4.00204V20.002C12 20.407 11.757 20.772 11.383 20.927C11.009 21.082 10.579 20.996 10.293 20.71L6 16.002H3C2.45 16.002 2 15.552 2 15.002V9.00204C2 8.45304 2.45 8.00204 3 8.00204H6L10.293 3.29604Z";
+        const VOICE_SECU = "M21.025 5V4C21.025 2.88 20.05 2 19 2C17.95 2 17 2.88 17 4V5C16.4477 5 16 5.44772 16 6V9C16 9.55228 16.4477 10 17 10H19H21C21.5523 10 22 9.55228 22 9V5.975C22 5.43652 21.5635 5 21.025 5ZM20 5H18V4C18 3.42857 18.4667 3 19 3C19.5333 3 20 3.42857 20 4V5Z";
+        const VOICE_WARN = "M19.8916 3.80204L22.2439 8.55654C22.5728 9.22119 22.0892 9.99999 21.3476 10L16.618 10C15.8746 10 15.3912 9.21769 15.7236 8.55279L18.1008 3.79829C18.4702 3.05951 19.5253 3.06172 19.8916 3.80204ZM18.4999 5H19.5V7.5H18.5L18.4999 5ZM18.4999 8.49887C18.4999 8.77589 18.724 9 19 9C19.276 9 19.5 8.77589 19.5 8.49887C19.5 8.22224 19.276 7.99773 19 7.99773C18.724 7.99773 18.4999 8.22224 18.4999 8.49887Z";
+        const FORUM = "M6.56929 14.6869H2.34375C1.97079 14.6869 1.61311 14.5387 1.34938 14.275C1.08566 14.0113 0.9375 13.6536 0.9375 13.2806V8.12437C0.9375 6.38389 1.6289 4.7147 2.85961 3.484C4.09032 2.25329 5.75951 1.56189 7.49999 1.56189C9.24047 1.56189 10.9097 2.25329 12.1404 3.484C12.6953 4.03895 13.1406 4.68307 13.4623 5.38267C14.9101 5.5973 16.2513 6.29124 17.2655 7.36251C18.4194 8.58133 19.0625 10.1959 19.0625 11.8744V17.0306C19.0625 17.4036 18.9144 17.7613 18.6506 18.025C18.3869 18.2887 18.0292 18.4369 17.6563 18.4369H12.5C11.1428 18.4369 9.81899 18.0162 8.71072 17.2328C7.7871 16.58 7.05103 15.7019 6.56929 14.6869ZM4.18544 4.80982C5.06451 3.93075 6.25679 3.43689 7.49999 3.43689C8.74319 3.43689 9.93549 3.93075 10.8146 4.80983C11.6936 5.6889 12.1875 6.88119 12.1875 8.12439C12.1875 9.36759 11.6936 10.5599 10.8146 11.439C9.93549 12.318 8.74321 12.8119 7.50001 12.8119H7.20268C7.19767 12.8118 7.19266 12.8118 7.18764 12.8119H2.8125V8.12438C2.8125 6.88118 3.30636 5.6889 4.18544 4.80982ZM8.672 14.5814C8.97763 15.0132 9.35591 15.3928 9.79299 15.7017C10.5847 16.2614 11.5305 16.5619 12.5 16.5619H17.1875V11.8744C17.1875 10.6755 16.7281 9.52219 15.9039 8.65159C15.3804 8.09865 14.735 7.68644 14.027 7.44246C14.0506 7.66798 14.0625 7.89557 14.0625 8.12439C14.0625 9.86487 13.3711 11.5341 12.1404 12.7648C11.1896 13.7156 9.97697 14.3445 8.672 14.5814Z";
+        const FORUM_CUT = "M13 4C13 3.66767 13.0405 3.3448 13.1169 3.03607C11.8881 2.28254 10.4651 1.87427 8.99999 1.87427C6.91141 1.87427 4.90838 2.70395 3.43153 4.1808C1.95469 5.65764 1.125 7.66067 1.125 9.74925V15.9368C1.125 16.3843 1.30279 16.8135 1.61926 17.13C1.93573 17.4465 2.36495 17.6243 2.8125 17.6243H7.88314C8.46123 18.8423 9.34451 19.896 10.4529 20.6794C11.7828 21.6195 13.3714 22.1242 15 22.1243H21.1875C21.6351 22.1243 22.0643 21.9465 22.3808 21.63C22.6972 21.3135 22.875 20.8843 22.875 20.4368V14.2492C22.875 13.3832 22.7323 12.5314 22.4596 11.7253C22.0074 11.9026 21.5151 12 21 12H20.1557C20.4625 12.7033 20.625 13.4682 20.625 14.2493V19.8743H15C13.8365 19.8743 12.7017 19.5136 11.7516 18.8421C11.2271 18.4713 10.7732 18.0159 10.4064 17.4977C11.9724 17.2135 13.4275 16.4587 14.5685 15.3177C15.5076 14.3786 16.185 13.2267 16.5538 11.9754C15.7646 11.8878 15.0447 11.5706 14.4624 11.0921C14.2192 12.0813 13.7097 12.9945 12.9775 13.7267C11.9226 14.7816 10.4919 15.3743 9.00001 15.3743H3.375V9.74925C3.375 8.25741 3.96763 6.82668 5.02252 5.77179C6.07741 4.7169 7.50815 4.12427 8.99999 4.12427C10.4918 4.12427 11.9226 4.7169 12.9775 5.77179L13 5.79444V4Z";
+        const FORUM_SECU = "M21.025 4V5C21.5635 5 22 5.43652 22 5.975V9C22 9.55228 21.5523 10 21 10H17C16.4477 10 16 9.55228 16 9V6C16 5.44772 16.4477 5 17 5V4C17 2.88 17.95 2 19 2C20.05 2 21.025 2.88 21.025 4ZM18 5H20V4C20 3.42857 19.5333 3 19 3C18.4667 3 18 3.42857 18 4V5Z";
+        const FORUM_WARN = "M22.2821 7.55654L19.9173 2.80204C19.5491 2.06172 18.4885 2.05951 18.1172 2.79829L15.7274 7.55279C15.3932 8.21769 15.8793 9 16.6265 9L21.3811 9C22.1265 8.99999 22.6126 8.22119 22.2821 7.55654ZM19.5237 4H18.5184L18.5184 6.5H19.5237V4ZM19.021 8C18.7436 8 18.5184 7.77589 18.5184 7.49887C18.5184 7.22224 18.7436 6.99773 19.021 6.99773C19.2985 6.99773 19.5237 7.22224 19.5237 7.49887C19.5237 7.77589 19.2985 8 19.021 8Z";
+        const ADS = "M19.1 4V5.12659L4.85 8.26447V18.1176C4.85 18.5496 5.1464 18.9252 5.5701 19.0315L9.3701 19.9727C9.4461 19.9906 9.524 20 9.6 20C9.89545 20 10.1776 19.8635 10.36 19.6235L12.7065 16.5242L19.1 17.9304V19.0588H21V4H19.1ZM9.2181 17.9944L6.75 17.3826V15.2113L10.6706 16.0753L9.2181 17.9944Z";
+        const ADS_CUT = "M22.545 4.87988V5.87988H23.28C23.4126 5.87988 23.52 5.98733 23.52 6.11988V10.6399C23.52 10.7724 23.4126 10.8799 23.28 10.8799H17.76C17.6275 10.8799 17.52 10.7724 17.52 10.6399V6.11988C17.52 5.98733 17.6275 5.87988 17.76 5.87988H18.52V4.87988C18.52 3.75988 19.47 2.87988 20.52 2.87988C21.57 2.87988 22.545 3.75988 22.545 4.87988ZM19.52 5.87988H21.52V4.87988C21.52 4.30845 21.0534 3.87988 20.52 3.87988C19.9867 3.87988 19.52 4.30845 19.52 4.87988V5.87988Z";
+        const ADS_CUT_W = "M20.4683 4.76211L22.8094 9.51661C23.1366 10.1813 22.6554 10.9601 21.9174 10.9601L17.2104 10.9601C16.4706 10.9601 15.9894 10.1778 16.3203 9.51286L18.6861 4.75836C19.0537 4.01957 20.1037 4.02179 20.4683 4.76211ZM19.0833 5.96007H20.0786V8.46007H19.0834L19.0833 5.96007ZM19.0833 9.45894C19.0833 9.73596 19.3063 9.96007 19.5809 9.96007C19.8556 9.96007 20.0786 9.73596 20.0786 9.45894C20.0786 9.18231 19.8556 8.9578 19.5809 8.9578C19.3063 8.9578 19.0833 9.18231 19.0833 9.45894Z";
+        const ADS_SECU = "M4.85 8.26429L15.84 5.84426V10.5599C15.84 11.6202 16.6996 12.4799 17.76 12.4799H21V19.0586H19.1V17.9302L12.7065 16.524L10.36 19.6233C10.1776 19.8633 9.89545 19.9998 9.6 19.9998C9.524 19.9998 9.4461 19.9904 9.3701 19.9725L5.5701 19.0313C5.1464 18.925 4.85 18.5495 4.85 18.1175V8.26429ZM9.2181 17.9942L6.75 17.3824V15.2111L10.6706 16.0751L9.2181 17.9942Z";
+        const ADS_WARN = "M4.85 8.26445L16.7165 5.65143L15.1067 9.30608C14.5477 10.5751 15.4771 12 16.8638 12H21V19.0588H19.1V17.9303L12.7065 16.5242L10.36 19.6235C10.1776 19.8635 9.89545 20 9.6 20C9.524 20 9.4461 19.9906 9.3701 19.9727L5.5701 19.0315C5.1464 18.9252 4.85 18.5496 4.85 18.1176V8.26445ZM9.2181 17.9943L6.75 17.3826V15.2113L10.6706 16.0753L9.2181 17.9943Z";
+        const RULE = "M33 34.5833V7.49998H35V36.6666H9C6.791 36.6666 5 34.801 5 32.5V7.49998C5 5.19894 6.791 3.33331 9 3.33331H31V30.4166H9C7.8955 30.4166 7 31.3485 7 32.5C7 33.6515 7.8955 34.5833 9 34.5833H33ZM23.9718 9.99998L15.8889 17.9915L12.7086 14.8441L10 17.5058L15.8885 23.3333L26.6667 12.6669L23.9718 9.99998Z";
+        const NSFW = "M19.8914 3.80204L22.2438 8.55654C22.5726 9.22119 22.0891 9.99999 21.3475 10L16.6179 10C15.8745 10 15.391 9.21769 15.7235 8.55279L18.1007 3.79829C18.4701 3.05951 19.5251 3.06172 19.8914 3.80204ZM18.4998 5H19.4999V7.5H18.4999L18.4998 5ZM18.4998 8.49887C18.4998 8.77589 18.7238 9 18.9998 9C19.2759 9 19.4999 8.77589 19.4999 8.49887C19.4999 8.22224 19.2759 7.99773 18.9998 7.99773C18.7238 7.99773 18.4998 8.22224 18.4998 8.49887Z";
+        const tags = [
+            { svgContent: [VOICE, VOICE_CUT], className1: 'voiceTags-2408cb', className2: 'voiceTags-2409cb', tagName: 'VOICE', emoji: '🎤', secureEmoji: '🔒', warnTag: VOICE_WARN, secureTag: VOICE_SECU },
+            { svgContent: [FORUM, FORUM_CUT], className1: 'forumTags-2408cb', className2: 'forumTags-2409cb', tagName: 'FORUM', emoji: '📰', secureEmoji: '🔒', warnTag: FORUM_WARN, secureTag: FORUM_SECU },
+            { svgContent: [ADS, ADS_CUT, ADS_CUT_W], className1: 'adsTags-2408cb', className2: 'adsTags-2409cb', tagName: 'ADS', emoji: '📝', secureEmoji: '🔒', warnTag: ADS_WARN, secureTag: ADS_SECU },
+            { svgContent: [RULE], className1: 'ruleTags-2408cb', className2: 'ruleTags-2409cb', tagName: 'RULE', emoji: '📋' },
+            { svgContent: [NSFW], className1: 'nsfwTags-2408cb', className2: 'nsfwTags-2409cb', tagName: 'NSFW', emoji: '🔞' },
         ];
-        stylesToRemove.forEach(styleId => {
-            const styleElement = document.getElementById(styleId);
-            if (styleElement) {
-                styleElement.remove();
-            }
-        });
-        const tagClasses = ['voiceTags-2408cb', 'forumTags-2408cb', 'nsfwTags-2408cb', 'ruleTags-2408cb', 'adsTags-2408cb'];
-        tagClasses.forEach(tagClass => {
-            const elements = document.querySelectorAll(`.${tagClass}`);
-            elements.forEach(element => {
-                element.parentNode.removeChild(element);
+        const channelListItems = document.querySelectorAll('.containerDefault-YUSmu3');
+        channelListItems.forEach(item => {
+            const svgElement = item.querySelector('svg');
+            if (!svgElement) return;
+            const svgHTML = svgElement.innerHTML;
+            const channelChildrenElement = item.querySelector('.children-1MGS9G');
+            if (!channelChildrenElement) return;
+            tags.forEach(tag => {
+                const isAlreadyTag = item.querySelector(`.${tag.className1}`);
+                const isSvgContainsTag = tag.svgContent.some(content => svgHTML.includes(content));
+                const isTagEnabled = this.settings[tag.tagName.toLowerCase()][tag.tagName.toLowerCase()];
+                if (isSvgContainsTag && !isAlreadyTag && isTagEnabled) {
+                    const isWarnTag = tag.warnTag && svgHTML.includes(tag.warnTag);
+                    const isSecureTag = tag.secureTag && svgHTML.includes(tag.secureTag);
+                    const emoji = isSecureTag ? tag.secureEmoji : tag.emoji;
+                    let tagElementHtml;
+                    let tagContent = tag.tagName;
+                    if (this.settings['emoji'].emoji) tagContent = `${emoji} ${tagContent}`;
+                    if (isWarnTag && this.settings['nsfw'].nsfw) {
+                        tagElementHtml = `
+                            <div style="display: flex;">
+                                <div style="margin-right:5px;" class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv nsfwTags-2409cb">${this.settings['emoji'].emoji ? "🔞 NSFW" : "NSFW"}</div>
+                                <div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv ${tag.className2}">${tagContent}</div>
+                            </div>`;
+                    } else {
+                        tagElementHtml = `<div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv ${tag.className2}">${tagContent}</div>`;
+                    }
+                    const tagElement = document.createElement('div');
+                    tagElement.className = `${tag.className1} iconBase-2G48Fc`;
+                    tagElement.innerHTML = tagElementHtml;
+                    channelChildrenElement.appendChild(tagElement);
+                }
             });
         });
-        this.disconnectObserver();
     }
 
-    /* CSS */
-    addCSS() {
-        const commonCSS = `
-            .setting-item { display: flex; align-items: center; margin: 20px 0; }
-            .setting-description { color: white; flex: 1; }
-            .setting-switch { position: relative; display: inline-block; width: 42px; height: 24px; }
-            .setting-switch input { opacity: 0; width: 0; height: 0; }
-            .setting-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; -webkit-transition: .4s; transition: .4s; border-radius: 24px; }
-            .setting-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%; }
-            input:checked + .setting-slider { background-color: #2196F3; }
-            input:focus + .setting-slider { box-shadow: 0 0 1px #2196F3; }
-            input:checked + .setting-slider:before { -webkit-transform: translateX(18px); -ms-transform: translateX(18px); transform: translateX(18px); }
-            .setting-slider.round { border-radius: 24px; }
-            .setting-slider.round:before { border-radius: 50%; }
-        `;
-        if (!document.getElementById('CSS_SettingsPanel')) {
-            let style = document.createElement('style');
-            style.id = 'CSS_SettingsPanel';
-            style.innerHTML = commonCSS;
-            document.head.appendChild(style);
-        }
-        const tags = [
-            { setting: "voice", className: "voiceTags", colorSetting: "voice_color" },
-            { setting: "forum", className: "forumTags", colorSetting: "forum_color" },
-            { setting: "nsfw", className: "nsfwTags", colorSetting: "nsfw_color" },
-            { setting: "rule", className: "ruleTags", colorSetting: "rule_color" },
-            { setting: "ads", className: "adsTags", colorSetting: "ads_color" },
-        ];
-        tags.forEach(tag => {
-            if (this.settings[tag.setting] && !document.getElementById(`CSS_${tag.setting}`)) {
-                let style = document.createElement('style');
-                style.id = `CSS_${tag.setting}`;
-                style.innerHTML = `
-                    .${tag.className}-2408cb                                             { margin-left: 2px; }
-                    .iconVisibility-vptxma.wrapper-NhbLHG:hover .${tag.className}-2408cb { display: none; }
-                    .${tag.className}-2409cb                                             { background-color: ${this.settings[tag.colorSetting]}; border-radius: 3px; }
-                `;
-                document.head.appendChild(style);
-            }
-        });
-    }
-
-    updateCSS() {
-        const tags = [
-            { setting: "voice", className: "voiceTags", colorSetting: "voice_color" },
-            { setting: "forum", className: "forumTags", colorSetting: "forum_color" },
-            { setting: "nsfw", className: "nsfwTags", colorSetting: "nsfw_color" },
-            { setting: "rule", className: "ruleTags", colorSetting: "rule_color" },
-            { setting: "ads", className: "adsTags", colorSetting: "ads_color" },
-        ];
-        tags.forEach(tag => {
-            let style = document.getElementById(`CSS_${tag.setting}`);
-            if (style && this.settings[tag.setting]) {
-                style.innerHTML = `
-                    .${tag.className}-2408cb                                             { margin-left: 2px; }
-                    .iconVisibility-vptxma.wrapper-NhbLHG:hover .${tag.className}-2408cb { display: none; }
-                    .${tag.className}-2409cb                                             { background-color: ${this.settings[tag.colorSetting]}; border-radius: 3px; }
-                `;
-            }
-        });
+    reloadTags() {
+        const tagClasses = ['voiceTags-2408cb', 'forumTags-2408cb', 'nsfwTags-2408cb', 'ruleTags-2408cb', 'adsTags-2408cb'];
+        tagClasses.forEach(tagClass => { const elements = document.querySelectorAll(`.${tagClass}`); elements.forEach(element => { element.parentNode.removeChild(element); }); });
+        this.AddtagChannels();
     }
 
     /* Settings Panel */
@@ -227,7 +250,7 @@ class ChannelsBadges {
             colorPickerButton.style.width = "23px";
             colorPickerButton.style.height = "23px";
             colorPickerButton.style.borderRadius = "50%";
-            colorPickerButton.style.backgroundColor = this.settings[checkbox.setting + "_color"];
+            colorPickerButton.style.backgroundColor = this.settings[checkbox.setting][checkbox.setting + "_color"];
             colorPickerButton.style.cursor = "pointer";
             colorPickerButton.style.outline = "none";
             colorPickerButton.style.border = "2px solid rgba(0, 0, 0, 0.1)";
@@ -240,7 +263,7 @@ class ChannelsBadges {
             resetEmoji.style.cursor = "pointer";
             resetEmoji.style.borderRadius = "50%";
             resetEmoji.title = "Reset Color";
-            if (this.settings[checkbox.setting]) {
+            if (this.settings[checkbox.setting][checkbox.setting]) {
                 colorPickerButton.style.cursor = "pointer";
                 colorPickerButton.style.opacity = "1";
                 colorPickerButton.disabled = false;
@@ -269,8 +292,8 @@ class ChannelsBadges {
                     input.style.opacity = 0;
                     input.addEventListener("input", (event) => {
                         checkbox.color = event.target.value;
-                        this.settings[checkbox.setting + "_color"] = checkbox.color;
-                        BdApi.saveData(this.getName(), "settings", this.settings);
+                        this.settings[checkbox.setting][checkbox.setting + "_color"] = checkbox.color;
+                        BdApi.Data.save(this.getName(), "settings", this.settings);
                         this.updateCSS();
                         this.reloadTags();
                         colorPickerButton.style.backgroundColor = checkbox.color;
@@ -296,11 +319,11 @@ class ChannelsBadges {
             colorPickerContainer.appendChild(colorPickerButton);
             settingItem.appendChild(settingDescription);
             resetEmoji.addEventListener("click", () => {
-                this.settings[checkbox.setting + "_color"] = this.defaultSettings[checkbox.setting + "_color"];
-                BdApi.saveData(this.getName(), "settings", this.settings);
+                this.settings[checkbox.setting + "_color"] = this.settings[checkbox.setting][checkbox.setting + "_color"];
+                BdApi.Data.save(this.getName(), "settings", this.settings);
                 this.updateCSS();
                 this.reloadTags();
-                colorPickerButton.style.backgroundColor = this.defaultSettings[checkbox.setting + "_color"];
+                colorPickerButton.style.backgroundColor = this.settings[checkbox.setting][checkbox.setting + "_color"];
             });
             if (checkbox.colorReset) settingItem.appendChild(resetEmoji);
             if (checkbox.colorPicker) settingItem.appendChild(colorPickerContainer);
@@ -325,14 +348,14 @@ class ChannelsBadges {
             const input = document.createElement("input");
             input.type = "checkbox";
             input.id = `${checkbox.setting}TagSetting`;
-            input.checked = this.settings[checkbox.setting];
+            input.checked = this.settings[checkbox.setting][checkbox.setting];
             label.appendChild(input);
             const sliderSpan = document.createElement("span");
             sliderSpan.className = "setting-slider";
             label.appendChild(sliderSpan);
             input.addEventListener("change", (event) => {
-                this.settings[checkbox.setting] = event.target.checked;
-                BdApi.saveData(this.getName(), "settings", this.settings);
+                this.settings[checkbox.setting][checkbox.setting] = event.target.checked;
+                BdApi.Data.save(this.getName(), "settings", this.settings);
                 if (event.target.checked) {
                     colorPickerButton.style.cursor = "pointer";
                     colorPickerButton.style.opacity = "1";
@@ -386,79 +409,6 @@ class ChannelsBadges {
             this.checkVersion(false);
         });
         return wrapper;
-    }
-
-    /* Tags */
-    AddtagChannels() {
-        const VOICE = "M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z";
-        const VOICE_CUT = "M15 12C15 12.0007 15 12.0013 15 12.002C15 12.553 14.551 13.002 14 13.002V15.002C15.654 15.002 17 13.657 17 12.002C17 12.0013 17 12.0007 17 12H15ZM19 12C19 12.0007 19 12.0013 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 12.0013 21 12.0007 21 12H19ZM10.293 3.29604C10.579 3.01004 11.009 2.92504 11.383 3.07904C11.757 3.23204 12 3.59904 12 4.00204V20.002C12 20.407 11.757 20.772 11.383 20.927C11.009 21.082 10.579 20.996 10.293 20.71L6 16.002H3C2.45 16.002 2 15.552 2 15.002V9.00204C2 8.45304 2.45 8.00204 3 8.00204H6L10.293 3.29604Z";
-        const VOICE_SECU = "M21.025 5V4C21.025 2.88 20.05 2 19 2C17.95 2 17 2.88 17 4V5C16.4477 5 16 5.44772 16 6V9C16 9.55228 16.4477 10 17 10H19H21C21.5523 10 22 9.55228 22 9V5.975C22 5.43652 21.5635 5 21.025 5ZM20 5H18V4C18 3.42857 18.4667 3 19 3C19.5333 3 20 3.42857 20 4V5Z";
-        const VOICE_WARN = "M19.8916 3.80204L22.2439 8.55654C22.5728 9.22119 22.0892 9.99999 21.3476 10L16.618 10C15.8746 10 15.3912 9.21769 15.7236 8.55279L18.1008 3.79829C18.4702 3.05951 19.5253 3.06172 19.8916 3.80204ZM18.4999 5H19.5V7.5H18.5L18.4999 5ZM18.4999 8.49887C18.4999 8.77589 18.724 9 19 9C19.276 9 19.5 8.77589 19.5 8.49887C19.5 8.22224 19.276 7.99773 19 7.99773C18.724 7.99773 18.4999 8.22224 18.4999 8.49887Z";
-        const FORUM = "M6.56929 14.6869H2.34375C1.97079 14.6869 1.61311 14.5387 1.34938 14.275C1.08566 14.0113 0.9375 13.6536 0.9375 13.2806V8.12437C0.9375 6.38389 1.6289 4.7147 2.85961 3.484C4.09032 2.25329 5.75951 1.56189 7.49999 1.56189C9.24047 1.56189 10.9097 2.25329 12.1404 3.484C12.6953 4.03895 13.1406 4.68307 13.4623 5.38267C14.9101 5.5973 16.2513 6.29124 17.2655 7.36251C18.4194 8.58133 19.0625 10.1959 19.0625 11.8744V17.0306C19.0625 17.4036 18.9144 17.7613 18.6506 18.025C18.3869 18.2887 18.0292 18.4369 17.6563 18.4369H12.5C11.1428 18.4369 9.81899 18.0162 8.71072 17.2328C7.7871 16.58 7.05103 15.7019 6.56929 14.6869ZM4.18544 4.80982C5.06451 3.93075 6.25679 3.43689 7.49999 3.43689C8.74319 3.43689 9.93549 3.93075 10.8146 4.80983C11.6936 5.6889 12.1875 6.88119 12.1875 8.12439C12.1875 9.36759 11.6936 10.5599 10.8146 11.439C9.93549 12.318 8.74321 12.8119 7.50001 12.8119H7.20268C7.19767 12.8118 7.19266 12.8118 7.18764 12.8119H2.8125V8.12438C2.8125 6.88118 3.30636 5.6889 4.18544 4.80982ZM8.672 14.5814C8.97763 15.0132 9.35591 15.3928 9.79299 15.7017C10.5847 16.2614 11.5305 16.5619 12.5 16.5619H17.1875V11.8744C17.1875 10.6755 16.7281 9.52219 15.9039 8.65159C15.3804 8.09865 14.735 7.68644 14.027 7.44246C14.0506 7.66798 14.0625 7.89557 14.0625 8.12439C14.0625 9.86487 13.3711 11.5341 12.1404 12.7648C11.1896 13.7156 9.97697 14.3445 8.672 14.5814Z";
-        const FORUM_CUT = "M13 4C13 3.66767 13.0405 3.3448 13.1169 3.03607C11.8881 2.28254 10.4651 1.87427 8.99999 1.87427C6.91141 1.87427 4.90838 2.70395 3.43153 4.1808C1.95469 5.65764 1.125 7.66067 1.125 9.74925V15.9368C1.125 16.3843 1.30279 16.8135 1.61926 17.13C1.93573 17.4465 2.36495 17.6243 2.8125 17.6243H7.88314C8.46123 18.8423 9.34451 19.896 10.4529 20.6794C11.7828 21.6195 13.3714 22.1242 15 22.1243H21.1875C21.6351 22.1243 22.0643 21.9465 22.3808 21.63C22.6972 21.3135 22.875 20.8843 22.875 20.4368V14.2492C22.875 13.3832 22.7323 12.5314 22.4596 11.7253C22.0074 11.9026 21.5151 12 21 12H20.1557C20.4625 12.7033 20.625 13.4682 20.625 14.2493V19.8743H15C13.8365 19.8743 12.7017 19.5136 11.7516 18.8421C11.2271 18.4713 10.7732 18.0159 10.4064 17.4977C11.9724 17.2135 13.4275 16.4587 14.5685 15.3177C15.5076 14.3786 16.185 13.2267 16.5538 11.9754C15.7646 11.8878 15.0447 11.5706 14.4624 11.0921C14.2192 12.0813 13.7097 12.9945 12.9775 13.7267C11.9226 14.7816 10.4919 15.3743 9.00001 15.3743H3.375V9.74925C3.375 8.25741 3.96763 6.82668 5.02252 5.77179C6.07741 4.7169 7.50815 4.12427 8.99999 4.12427C10.4918 4.12427 11.9226 4.7169 12.9775 5.77179L13 5.79444V4Z";
-        const FORUM_SECU = "M21.025 4V5C21.5635 5 22 5.43652 22 5.975V9C22 9.55228 21.5523 10 21 10H17C16.4477 10 16 9.55228 16 9V6C16 5.44772 16.4477 5 17 5V4C17 2.88 17.95 2 19 2C20.05 2 21.025 2.88 21.025 4ZM18 5H20V4C20 3.42857 19.5333 3 19 3C18.4667 3 18 3.42857 18 4V5Z";
-        const FORUM_WARN = "M22.2821 7.55654L19.9173 2.80204C19.5491 2.06172 18.4885 2.05951 18.1172 2.79829L15.7274 7.55279C15.3932 8.21769 15.8793 9 16.6265 9L21.3811 9C22.1265 8.99999 22.6126 8.22119 22.2821 7.55654ZM19.5237 4H18.5184L18.5184 6.5H19.5237V4ZM19.021 8C18.7436 8 18.5184 7.77589 18.5184 7.49887C18.5184 7.22224 18.7436 6.99773 19.021 6.99773C19.2985 6.99773 19.5237 7.22224 19.5237 7.49887C19.5237 7.77589 19.2985 8 19.021 8Z";
-        const ADS = "M19.1 4V5.12659L4.85 8.26447V18.1176C4.85 18.5496 5.1464 18.9252 5.5701 19.0315L9.3701 19.9727C9.4461 19.9906 9.524 20 9.6 20C9.89545 20 10.1776 19.8635 10.36 19.6235L12.7065 16.5242L19.1 17.9304V19.0588H21V4H19.1ZM9.2181 17.9944L6.75 17.3826V15.2113L10.6706 16.0753L9.2181 17.9944Z";
-        const ADS_CUT = "M22.545 4.87988V5.87988H23.28C23.4126 5.87988 23.52 5.98733 23.52 6.11988V10.6399C23.52 10.7724 23.4126 10.8799 23.28 10.8799H17.76C17.6275 10.8799 17.52 10.7724 17.52 10.6399V6.11988C17.52 5.98733 17.6275 5.87988 17.76 5.87988H18.52V4.87988C18.52 3.75988 19.47 2.87988 20.52 2.87988C21.57 2.87988 22.545 3.75988 22.545 4.87988ZM19.52 5.87988H21.52V4.87988C21.52 4.30845 21.0534 3.87988 20.52 3.87988C19.9867 3.87988 19.52 4.30845 19.52 4.87988V5.87988Z";
-        const ADS_CUT_W = "M20.4683 4.76211L22.8094 9.51661C23.1366 10.1813 22.6554 10.9601 21.9174 10.9601L17.2104 10.9601C16.4706 10.9601 15.9894 10.1778 16.3203 9.51286L18.6861 4.75836C19.0537 4.01957 20.1037 4.02179 20.4683 4.76211ZM19.0833 5.96007H20.0786V8.46007H19.0834L19.0833 5.96007ZM19.0833 9.45894C19.0833 9.73596 19.3063 9.96007 19.5809 9.96007C19.8556 9.96007 20.0786 9.73596 20.0786 9.45894C20.0786 9.18231 19.8556 8.9578 19.5809 8.9578C19.3063 8.9578 19.0833 9.18231 19.0833 9.45894Z";
-        const ADS_SECU = "M4.85 8.26429L15.84 5.84426V10.5599C15.84 11.6202 16.6996 12.4799 17.76 12.4799H21V19.0586H19.1V17.9302L12.7065 16.524L10.36 19.6233C10.1776 19.8633 9.89545 19.9998 9.6 19.9998C9.524 19.9998 9.4461 19.9904 9.3701 19.9725L5.5701 19.0313C5.1464 18.925 4.85 18.5495 4.85 18.1175V8.26429ZM9.2181 17.9942L6.75 17.3824V15.2111L10.6706 16.0751L9.2181 17.9942Z";
-        const ADS_WARN = "M4.85 8.26445L16.7165 5.65143L15.1067 9.30608C14.5477 10.5751 15.4771 12 16.8638 12H21V19.0588H19.1V17.9303L12.7065 16.5242L10.36 19.6235C10.1776 19.8635 9.89545 20 9.6 20C9.524 20 9.4461 19.9906 9.3701 19.9727L5.5701 19.0315C5.1464 18.9252 4.85 18.5496 4.85 18.1176V8.26445ZM9.2181 17.9943L6.75 17.3826V15.2113L10.6706 16.0753L9.2181 17.9943Z";
-        const RULE = "M33 34.5833V7.49998H35V36.6666H9C6.791 36.6666 5 34.801 5 32.5V7.49998C5 5.19894 6.791 3.33331 9 3.33331H31V30.4166H9C7.8955 30.4166 7 31.3485 7 32.5C7 33.6515 7.8955 34.5833 9 34.5833H33ZM23.9718 9.99998L15.8889 17.9915L12.7086 14.8441L10 17.5058L15.8885 23.3333L26.6667 12.6669L23.9718 9.99998Z";
-        const NSFW = "M19.8914 3.80204L22.2438 8.55654C22.5726 9.22119 22.0891 9.99999 21.3475 10L16.6179 10C15.8745 10 15.391 9.21769 15.7235 8.55279L18.1007 3.79829C18.4701 3.05951 19.5251 3.06172 19.8914 3.80204ZM18.4998 5H19.4999V7.5H18.4999L18.4998 5ZM18.4998 8.49887C18.4998 8.77589 18.7238 9 18.9998 9C19.2759 9 19.4999 8.77589 19.4999 8.49887C19.4999 8.22224 19.2759 7.99773 18.9998 7.99773C18.7238 7.99773 18.4998 8.22224 18.4998 8.49887Z";
-        const tags = [
-            { svgContent: [VOICE, VOICE_CUT], className1: 'voiceTags-2408cb', className2: 'voiceTags-2409cb', tagName: 'VOICE', emoji: '🎤', secureEmoji: '🔒', warnTag: VOICE_WARN, secureTag: VOICE_SECU },
-            { svgContent: [FORUM, FORUM_CUT], className1: 'forumTags-2408cb', className2: 'forumTags-2409cb', tagName: 'FORUM', emoji: '📰', secureEmoji: '🔒', warnTag: FORUM_WARN, secureTag: FORUM_SECU },
-            { svgContent: [ADS, ADS_CUT, ADS_CUT_W], className1: 'adsTags-2408cb', className2: 'adsTags-2409cb', tagName: 'ADS', emoji: '📝', secureEmoji: '🔒', warnTag: ADS_WARN, secureTag: ADS_SECU },
-            { svgContent: [RULE], className1: 'ruleTags-2408cb', className2: 'ruleTags-2409cb', tagName: 'RULE', emoji: '📋' },
-            { svgContent: [NSFW], className1: 'nsfwTags-2408cb', className2: 'nsfwTags-2409cb', tagName: 'NSFW', emoji: '🔞' },
-        ];
-        const channelListItems = document.querySelectorAll('.containerDefault-YUSmu3');
-        channelListItems.forEach(item => {
-            const svgElement = item.querySelector('svg');
-            if (!svgElement) return;
-            const svgHTML = svgElement.innerHTML;
-            const channelChildrenElement = item.querySelector('.children-1MGS9G');
-            if (!channelChildrenElement) return;
-            tags.forEach(tag => {
-                const isAlreadyTag = item.querySelector(`.${tag.className1}`);
-                const isSvgContainsTag = tag.svgContent.some(content => svgHTML.includes(content));
-                const isTagEnabled = this.settings[tag.tagName.toLowerCase()];
-                if (isSvgContainsTag && !isAlreadyTag && isTagEnabled) {
-                    const isWarnTag = tag.warnTag && svgHTML.includes(tag.warnTag);
-                    const isSecureTag = tag.secureTag && svgHTML.includes(tag.secureTag);
-                    const emoji = isSecureTag ? tag.secureEmoji : tag.emoji;
-                    let tagElementHtml;
-                    let tagContent = tag.tagName;
-                    if (this.settings['emoji']) {
-                        tagContent = `${emoji} ${tagContent}`;
-                    }
-                    if (isWarnTag && this.settings['nsfw']) {
-                        tagElementHtml = `
-                            <div style="display: flex;">
-                                <div style="margin-right:5px;" class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv nsfwTags-2409cb">${this.settings['emoji'] ? "🔞 NSFW" : "NSFW"}</div>
-                                <div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv ${tag.className2}">${tagContent}</div>
-                            </div>`;
-                    } else {
-                        tagElementHtml = `<div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv ${tag.className2}">${tagContent}</div>`;
-                    }
-                    const tagElement = document.createElement('div');
-                    tagElement.className = `${tag.className1} iconBase-2G48Fc`;
-                    tagElement.innerHTML = tagElementHtml;
-                    channelChildrenElement.appendChild(tagElement);
-                }
-            });
-        });
-    }
-
-    reloadTags() {
-        const tagClasses = ['voiceTags-2408cb', 'forumTags-2408cb', 'nsfwTags-2408cb', 'ruleTags-2408cb', 'adsTags-2408cb'];
-        tagClasses.forEach(tagClass => {
-            const elements = document.querySelectorAll(`.${tagClass}`);
-            elements.forEach(element => {
-                element.parentNode.removeChild(element);
-            });
-        });
-        this.AddtagChannels();
     }
 
     /* Observer */

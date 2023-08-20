@@ -15,4 +15,4 @@ Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
 ## Screenshot
 
 ![cover](https://sharex.sheiylanie.com/i/B5tBO)<br>
-![cover](https://sharex.sheiylanie.com/i/YmNBVYR7)
+![cover](https://sharex.sheiylanie.com/i/xbsp)

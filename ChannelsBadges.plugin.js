@@ -3,7 +3,7 @@
  * @author Sheiylanie
  * @authorId 183948625368317952
  * @description Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
- * @version 1.1.0
+ * @version 1.1.1
  * @invite GWYNKpbunT
  * @donate https://www.paypal.com/paypalme/Sheiylanie
  * @website https://revgames.tech/
@@ -12,10 +12,7 @@
  */
 
 class ChannelsBadges {
-    getName() { return "ChannelsBadges"; }
-    getDescription() { return "Add Voice | Forum | Nsfw | Rule | Ads badges to channels."; }
-    getVersion() { return "1.1.0"; }
-    getAuthor() { return "Sheiylanie"; }
+    constructor(meta) { this.meta = meta; }
 
     /* Plugin Start */
     start() {
@@ -29,7 +26,7 @@ class ChannelsBadges {
 
     /* Settings */
     settings = {
-        version: "1.1.0",
+        version: "1.1.1",
         emoji: { emoji: true },
         voice: { voice: true, voice_color: "#1ABC9C" },
         forum: { forum: true, forum_color: "#206694" },
@@ -39,11 +36,11 @@ class ChannelsBadges {
     };
 
     loadSettings() {
-        this.settings = BdApi.Data.load(this.getName(), "settings") || this.settings;
+        this.settings = BdApi.Data.load(this.meta.name, "settings") || this.settings;
     }
 
     saveSettings() {
-        BdApi.Data.save(this.getName(), "settings", this.settings);
+        BdApi.Data.save(this.meta.name, "settings", this.settings);
     }
 
     /* Plugin Stop */
@@ -94,7 +91,7 @@ class ChannelsBadges {
                 children: [
                     BdApi.React.createElement('div', { className: 'flex-2S1XBF flex-3BkGQD horizontal-112GEH horizontal-1Piu5- flex-3BkGQD directionRow-2Iu2A9 justifyStart-2Mwniq alignCenter-14kD11 noWrap-hBpHBz header-1ffhsl', style: { flex: '0 0 auto' } },
                         BdApi.React.createElement('div', { className: 'flexChild-3PzYmX', style: { flex: '1 1 auto' } },
-                            BdApi.React.createElement('h1', { className: 'h4-6SAiIK title-lXcL8p defaultColor-3Olr-9 defaultMarginh4-3MmT5q', children: `${this.getName()}` }),
+                            BdApi.React.createElement('h1', { className: 'h4-6SAiIK title-lXcL8p defaultColor-3Olr-9 defaultMarginh4-3MmT5q', children: `${this.meta.name}` }),
                             BdApi.React.createElement('div', { className: 'colorStandard-1Xxp1s size12-12FL_s', children: `Version ${currentVersion}` })),
                         BdApi.React.createElement('button', { 'aria-label': 'Close', type: 'button', className: 'close-A4ZfTI button-ejjZWC lookBlank-FgPMy6 colorBrand-2M3O3N grow-2T4nbg', onClick: closeCallback },
                             BdApi.React.createElement('div', { className: 'contents-3NembX' },
@@ -123,15 +120,15 @@ class ChannelsBadges {
         };
         ModalActions.openModal((props) => { return MyModal(props.onClose); });
         this.settings['version'] = currentVersion;
-        BdApi.Data.save(this.getName(), "settings", this.settings);
+        BdApi.Data.save(this.meta.name, "settings", this.settings);
     }
 
     checkVersion(sys) {
-        const currentVersion = this.getVersion();
-        const previousVersion = BdApi.Data.load(this.getName(), "settings").version;
+        const currentVersion = this.meta.version;
+        const previousVersion = BdApi.Data.load(this.meta.name, "settings").version;
         const ModalComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("ModalRoot"));
         const ModalActions = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("openModal", "updateModal"));
-        const changelogs = `Fix Deprecated Api`;
+        const changelogs = `Fix meta to constructor`;
         if (sys) {
             if (previousVersion && currentVersion !== previousVersion) this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs);
         } else {
@@ -293,7 +290,7 @@ class ChannelsBadges {
                     input.addEventListener("input", (event) => {
                         checkbox.color = event.target.value;
                         this.settings[checkbox.setting][checkbox.setting + "_color"] = checkbox.color;
-                        BdApi.Data.save(this.getName(), "settings", this.settings);
+                        BdApi.Data.save(this.meta.name, "settings", this.settings);
                         this.updateCSS();
                         this.reloadTags();
                         colorPickerButton.style.backgroundColor = checkbox.color;
@@ -320,7 +317,7 @@ class ChannelsBadges {
             settingItem.appendChild(settingDescription);
             resetEmoji.addEventListener("click", () => {
                 this.settings[checkbox.setting + "_color"] = this.settings[checkbox.setting][checkbox.setting + "_color"];
-                BdApi.Data.save(this.getName(), "settings", this.settings);
+                BdApi.Data.save(this.meta.name, "settings", this.settings);
                 this.updateCSS();
                 this.reloadTags();
                 colorPickerButton.style.backgroundColor = this.settings[checkbox.setting][checkbox.setting + "_color"];
@@ -355,7 +352,7 @@ class ChannelsBadges {
             label.appendChild(sliderSpan);
             input.addEventListener("change", (event) => {
                 this.settings[checkbox.setting][checkbox.setting] = event.target.checked;
-                BdApi.Data.save(this.getName(), "settings", this.settings);
+                BdApi.Data.save(this.meta.name, "settings", this.settings);
                 if (event.target.checked) {
                     colorPickerButton.style.cursor = "pointer";
                     colorPickerButton.style.opacity = "1";

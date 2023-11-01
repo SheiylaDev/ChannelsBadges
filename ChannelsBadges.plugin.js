@@ -3,7 +3,7 @@
  * @author Sheiylanie
  * @authorId 183948625368317952
  * @description Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
- * @version 1.1.2
+ * @version 1.1.3
  * @invite GWYNKpbunT
  * @donate https://www.paypal.com/paypalme/Sheiylanie
  * @website https://revgames.tech/
@@ -26,7 +26,7 @@ class ChannelsBadges {
 
     /* Settings */
     settings = {
-        version: "1.1.2",
+        version: "1.1.3",
         emoji: { emoji: true },
         voice: { voice: true, voice_color: "#1ABC9C" },
         forum: { forum: true, forum_color: "#206694" },
@@ -89,30 +89,30 @@ class ChannelsBadges {
                 transitionState: 1,
                 size: 'small',
                 children: [
-                    BdApi.React.createElement('div', { className: 'flex-2S1XBF flex-3BkGQD horizontal-112GEH horizontal-1Piu5- flex-3BkGQD directionRow-2Iu2A9 justifyStart-2Mwniq alignCenter-14kD11 noWrap-hBpHBz header-1ffhsl', style: { flex: '0 0 auto' } },
-                        BdApi.React.createElement('div', { className: 'flexChild-3PzYmX', style: { flex: '1 1 auto' } },
-                            BdApi.React.createElement('h1', { className: 'h4-6SAiIK title-lXcL8p defaultColor-3Olr-9 defaultMarginh4-3MmT5q', children: `${this.meta.name}` }),
-                            BdApi.React.createElement('div', { className: 'colorStandard-1Xxp1s size12-12FL_s', children: `Version ${currentVersion}` })),
-                        BdApi.React.createElement('button', { 'aria-label': 'Close', type: 'button', className: 'close-A4ZfTI button-ejjZWC lookBlank-FgPMy6 colorBrand-2M3O3N grow-2T4nbg', onClick: closeCallback },
-                            BdApi.React.createElement('div', { className: 'contents-3NembX' },
-                                BdApi.React.createElement('svg', { 'aria-hidden': 'true', role: 'img', className: 'closeIcon-pSJDFz', width: '24', height: '24', viewBox: '0 0 24 24' },
+                    BdApi.React.createElement('div', { className: 'flex_f5fbb7 flex__909d4 horizontal-112GEH horizontal__992f6 flex__909d4 directionRow_c467f3 justifyStart__42744 alignCenter__84269 noWrap__5c413 header__6d5ea', style: { flex: '0 0 auto' } },
+                        BdApi.React.createElement('div', { className: 'flexChild__6e093', style: { flex: '1 1 auto' } },
+                            BdApi.React.createElement('h1', { className: 'h4_b54400 title__3e421 defaultColor__77578 defaultMarginh4__94cb0', children: `${this.meta.name}` }),
+                            BdApi.React.createElement('div', { className: 'colorStandard__5111e size12_cdac29', children: `Version ${currentVersion}` })),
+                        BdApi.React.createElement('button', { 'aria-label': 'Close', type: 'button', className: 'close__7645f button__77913 lookBlank__7ca0a colorBrand_be5f58 grow__4c8a4', onClick: closeCallback },
+                            BdApi.React.createElement('div', { className: 'contents_fb6220' },
+                                BdApi.React.createElement('svg', { 'aria-hidden': 'true', role: 'img', className: 'closeIcon__5bab9', width: '24', height: '24', viewBox: '0 0 24 24' },
                                     BdApi.React.createElement('path', { fill: 'currentColor', d: 'M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z' }))))),
-                    BdApi.React.createElement('div', { className: 'content-1OG56Q container-3PVapX content-FDHp32 thin-RnSY0a scrollerBase-1Pkza4', dir: 'ltr', style: { overflow: 'hidden scroll', paddingRigth: '8px' } }, [
-                        BdApi.React.createElement('h1', { className: 'fixed-cTX7Hp title-2ftWWc marginTop20-2T8ZJx', style: { marginTop: '0px' }, children: 'Changelogs' }),
+                    BdApi.React.createElement('div', { className: 'content_c7165a container__3b77e content_e518d4 thin_b1c063 scrollerBase__1e823', dir: 'ltr', style: { overflow: 'hidden scroll', paddingRigth: '8px' } }, [
+                        BdApi.React.createElement('h1', { className: 'fixed__5f419 title__09d1c marginTop20_d88ee7', style: { marginTop: '0px' }, children: 'Changelogs' }),
                         BdApi.React.createElement('ul', { style: { fontSize: '' } }, changelogs.split('\n').map((item, index) => (
                             BdApi.React.createElement('li', { key: index }, item.trim())
                         ))),
                         BdApi.React.createElement('div', { 'aria-hidden': 'true', style: { position: 'absolute', pointerEvents: 'none', minHeight: '0px', minWidth: '1px', flex: '0 0 auto', height: '20px' } })
                     ]),
                     BdApi.React.createElement('div', {
-                        className: 'flex-2S1XBF flex-3BkGQD horizontal-112GEH horizontal-1Piu5- flex-3BkGQD directionRow-2Iu2A9 justifyStart-2Mwniq alignStretch-Uwowzr noWrap-hBpHBz footer-IubaaS', style: { flex: '0 0 auto' }
+                        className: 'flex_f5fbb7 flex__909d4 horizontal-112GEH horizontal__992f6 flex__909d4 directionRow_c467f3 justifyStart__42744 alignStretch_e239ef noWrap__5c413 footer__89240', style: { flex: '0 0 auto' }
                     }, [
-                        BdApi.React.createElement('div', { className: 'footer-1gMODG' }, [
-                            BdApi.React.createElement('a', { className: 'anchor-1X4H4q anchorUnderlineOnHover-wiZFZ_ socialLink-1qjJIk', href: 'https://www.paypal.me/Sheiylanie', rel: 'noreferrer noopener', target: '_blank', role: 'button', tabindex: '0' },
-                                BdApi.React.createElement('svg', { name: 'PayPal', width: '16', height: '16', viewBox: '0 0 24 24', className: 'icon-GhnIRB' },
+                        BdApi.React.createElement('div', { className: 'footer__89240' }, [
+                            BdApi.React.createElement('a', { className: 'anchor_c8ddc0 anchorUnderlineOnHover__78236 socialLink_f11d71', href: 'https://www.paypal.me/Sheiylanie', rel: 'noreferrer noopener', target: '_blank', role: 'button', tabindex: '0' },
+                                BdApi.React.createElement('svg', { name: 'PayPal', width: '16', height: '16', viewBox: '0 0 24 24', className: 'icon__8f621' },
                                     BdApi.React.createElement('path', { fill: 'currentColor', d: 'M 5.6863929,0 C 5.1806043,0 4.7507198,0.3656279 4.6704813,0.85995389 L 1.6795909,19.673995 c -0.058746,0.371103 0.2309887,0.706911 0.6092555,0.706911 h 4.4338638 l 1.1121097,-7.006437 -0.033522,0.22009 c 0.078805,-0.494326 0.5072079,-0.859954 1.0129965,-0.859954 h 2.1061586 c 4.139443,0 7.378419,-1.667588 8.325519,-6.4919233 0.02866,-0.1432829 0.07434,-0.4183163 0.07434,-0.4183163 C 19.589638,4.0390606 19.318112,2.8290903 18.345211,1.7301106 17.276361,0.5193702 15.342278,0 12.867737,0 Z M 21.516831,7.8139196 c -1.028771,4.7498274 -4.3124,7.2629664 -9.522166,7.2629664 H 10.107139 L 8.6962314,24 H 11.76 c 0.442744,0 0.820329,-0.319405 0.889104,-0.753552 l 0.03498,-0.189482 0.705454,-4.428033 0.04519,-0.244868 c 0.06878,-0.434148 0.446338,-0.753554 0.887649,-0.753554 h 0.559699 c 3.620757,0 6.455196,-1.457472 7.283371,-5.677153 0.332416,-1.693603 0.172401,-3.113533 -0.64861,-4.1394384 z' }))
                             ),
-                            BdApi.React.createElement('div', { className: 'colorStandard-1Xxp1s size12-12FL_s', children: 'Support me for more updates !' })
+                            BdApi.React.createElement('div', { className: 'colorStandard__5111e size12_cdac29', children: 'Support me for more updates !' })
                         ])
                     ])
                 ]
@@ -128,7 +128,7 @@ class ChannelsBadges {
         const previousVersion = BdApi.Data.load(this.meta.name, "settings").version;
         const ModalComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("ModalRoot"));
         const ModalActions = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("openModal", "updateModal"));
-        const changelogs = `Reset color fix not working`;
+        const changelogs = `Fixes latest discord update`;
         if (sys) {
             if (previousVersion && currentVersion !== previousVersion) this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs);
         } else {
@@ -160,12 +160,12 @@ class ChannelsBadges {
             { svgContent: [RULE], className1: 'ruleTags-2408cb', className2: 'ruleTags-2409cb', tagName: 'RULE', emoji: '📋' },
             { svgContent: [NSFW], className1: 'nsfwTags-2408cb', className2: 'nsfwTags-2409cb', tagName: 'NSFW', emoji: '🔞' },
         ];
-        const channelListItems = document.querySelectorAll('.containerDefault-YUSmu3');
+        const channelListItems = document.querySelectorAll('.containerDefault__3187b');
         channelListItems.forEach(item => {
             const svgElement = item.querySelector('svg');
             if (!svgElement) return;
             const svgHTML = svgElement.innerHTML;
-            const channelChildrenElement = item.querySelector('.children-1MGS9G');
+            const channelChildrenElement = item.querySelector('.children_a486f8');
             if (!channelChildrenElement) return;
             tags.forEach(tag => {
                 const isAlreadyTag = item.querySelector(`.${tag.className1}`);
@@ -181,14 +181,14 @@ class ChannelsBadges {
                     if (isWarnTag && this.settings['nsfw'].nsfw) {
                         tagElementHtml = `
                             <div style="display: flex;">
-                                <div style="margin-right:5px;" class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv nsfwTags-2409cb">${this.settings['emoji'].emoji ? "🔞 NSFW" : "NSFW"}</div>
-                                <div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv ${tag.className2}">${tagContent}</div>
+                                <div style="margin-right:5px;" class="textBadge__45d79 base__92a12 eyebrow__60985 baseShapeRound__95d0f nsfwTags-2409cb">${this.settings['emoji'].emoji ? "🔞 NSFW" : "NSFW"}</div>
+                                <div class="textBadge__45d79 base__92a12 eyebrow__60985 baseShapeRound__95d0f ${tag.className2}">${tagContent}</div>
                             </div>`;
                     } else {
-                        tagElementHtml = `<div class="textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv ${tag.className2}">${tagContent}</div>`;
+                        tagElementHtml = `<div class="textBadge__45d79 base__92a12 eyebrow__60985 baseShapeRound__95d0f ${tag.className2}">${tagContent}</div>`;
                     }
                     const tagElement = document.createElement('div');
-                    tagElement.className = `${tag.className1} iconBase-2G48Fc`;
+                    tagElement.className = `${tag.className1} iconBase-ad2G48Fc`;
                     tagElement.innerHTML = tagElementHtml;
                     channelChildrenElement.appendChild(tagElement);
                 }
@@ -332,7 +332,7 @@ class ChannelsBadges {
             const settingDescription = document.createElement("div");
             settingDescription.className = "setting-description";
             const badgeDiv = document.createElement("div");
-            badgeDiv.className = `textBadge-1fdDPJ base-3IDx3L eyebrow-132Xza baseShapeRound-3epLEv ${checkbox.className}`;
+            badgeDiv.className = `textBadge__45d79 base__92a12 eyebrow__60985 baseShapeRound__95d0f ${checkbox.className}`;
             badgeDiv.style.width = checkbox.setting === "emoji" ? "125px" : "70px";
             badgeDiv.style.fontSize = checkbox.setting === "emoji" ? "13px" : "12px";
             badgeDiv.innerText = checkbox.label;
@@ -401,7 +401,7 @@ class ChannelsBadges {
         });
         const changeLogButton = document.createElement("div");
         changeLogButton.style.cssText = "position: fixed; top: 14px; right: 14px; cursor: pointer !important;";
-        changeLogButton.innerHTML = `<svg name="ChangeLog" width="24" height="24" viewBox="0 0 24 24" class="icon-GhnIRB"><path fill="currentColor" d="M 12.994141,2 C 7.4665894,2 3,6.4779848 3,12 H 1 L 4.0996094,15.408203 7.2226562,12 h -2 c 0,-4.2942525 3.4830736,-7.7773438 7.7773438,-7.7773438 4.294251,0 7.777344,3.4830913 7.777344,7.7773438 0,4.294253 -3.483093,7.779297 -7.777344,7.779297 -2.149914,0 -4.0886771,-0.879641 -5.4941406,-2.285156 L 5.9335938,19.066406 C 7.7390932,20.877425 10.233155,22 12.994141,22 18.521728,22 23,17.522015 23,12 23,6.4779858 18.521728,2 12.994141,2 Z m -1.496094,4.4375 v 6.632812 l 5.675781,3.367188 0.953125,-1.611328 -4.640625,-2.751953 V 6.4375 Z" class=""></path></svg>`;
+        changeLogButton.innerHTML = `<svg name="ChangeLog" width="24" height="24" viewBox="0 0 24 24" class="icon__8f621"><path fill="currentColor" d="M 12.994141,2 C 7.4665894,2 3,6.4779848 3,12 H 1 L 4.0996094,15.408203 7.2226562,12 h -2 c 0,-4.2942525 3.4830736,-7.7773438 7.7773438,-7.7773438 4.294251,0 7.777344,3.4830913 7.777344,7.7773438 0,4.294253 -3.483093,7.779297 -7.777344,7.779297 -2.149914,0 -4.0886771,-0.879641 -5.4941406,-2.285156 L 5.9335938,19.066406 C 7.7390932,20.877425 10.233155,22 12.994141,22 18.521728,22 23,17.522015 23,12 23,6.4779858 18.521728,2 12.994141,2 Z m -1.496094,4.4375 v 6.632812 l 5.675781,3.367188 0.953125,-1.611328 -4.640625,-2.751953 V 6.4375 Z" class=""></path></svg>`;
         wrapper.appendChild(changeLogButton);
         changeLogButton.addEventListener("click", () => {
             this.checkVersion(false);
@@ -413,7 +413,7 @@ class ChannelsBadges {
     setupObserver() {
         this.observer = new MutationObserver((mutationsList, observer) => {
             for (let mutation of mutationsList) {
-                if (mutation.addedNodes && mutation.addedNodes.length > 0 && mutation.addedNodes[0].classList && (mutation.addedNodes[0].classList.contains('listItem-3SmSlK') || mutation.addedNodes[0].classList.contains('containerDefault-YUSmu3'))) {
+                if (mutation.addedNodes && mutation.addedNodes.length > 0 && mutation.addedNodes[0].classList && (mutation.addedNodes[0].classList.contains('listItem_fa7b36') || mutation.addedNodes[0].classList.contains('containerDefault__3187b'))) {
                     this.AddtagChannels();
                 }
             }

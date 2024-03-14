@@ -3,7 +3,7 @@
  * @author Sheiylanie
  * @authorId 183948625368317952
  * @description Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
- * @version 1.1.5
+ * @version 1.1.6
  * @invite GWYNKpbunT
  * @donate https://www.paypal.com/paypalme/Sheiylanie
  * @website https://revgames.tech/
@@ -18,7 +18,7 @@ class ChannelsBadges {
     constructor(meta) {
         this.meta = meta;
         this.CBsettings = {
-            version: "1.1.5",
+            version: "1.1.6",
             voice: { voice: true, text: true, emoji: true, voice_color: "#1ABC9C" },
             forum: { forum: true, text: true, emoji: true, forum_color: "#206694" },
             nsfw: { nsfw: true, text: true, emoji: true, nsfw_color: "#F23F42" },
@@ -160,9 +160,9 @@ class ChannelsBadges {
         const previousVersion = BdApi.Data.load(this.meta.name, "CBsettings").version;
         const ModalComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("ModalRoot"));
         const ModalActions = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("openModal", "updateModal"));
-        const changelogsTitle = 'Fix Badges';
+        const changelogsTitle = 'Fix Logs';
         const changelogs = [
-            `Discord replaces original SVGs.`,
+            `Delete: console.log("AddtagChannels");`,
         ];
         if (sys) {
             if (previousVersion && currentVersion !== previousVersion) this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs, changelogsTitle);
@@ -442,7 +442,6 @@ class ChannelsBadges {
                 tagElement.className = `${tag.className} iconBase-2G48Fc`;
                 const emoji = isSecureTag ? tag.secureEmoji : tag.icon;
                 if (isSvgContainsTag && !isAlreadyTag && isTagEnabled) {
-                    console.log("AddtagChannels");
                     if (this.CBsettings[tag.setting][tag.setting]) {
                         item.addEventListener('mouseover', function () { const badges = this.querySelectorAll(`.${tag.className}`); badges.forEach(badge => badge.style.display = 'none'); });
                         item.addEventListener('mouseout', function () { const badges = this.querySelectorAll(`.${tag.className}`); badges.forEach(badge => badge.style.display = 'inline-flex'); });

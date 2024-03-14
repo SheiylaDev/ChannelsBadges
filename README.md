@@ -14,6 +14,9 @@ Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
 
 ## Changelog
 
+### 🕙 1.1.6
+- ☑️ Delete: console.log("AddtagChannels");
+
 ### 🕙 1.1.4
 - ☑️ Update: Enhancing the plugin code.
 - ☑️ Update: Plugin fully restructuring and integrated css style.

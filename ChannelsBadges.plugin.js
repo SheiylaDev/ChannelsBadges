@@ -3,7 +3,7 @@
  * @author Sheiylanie
  * @authorId 183948625368317952
  * @description Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
- * @version 1.1.6
+ * @version 1.1.7
  * @invite GWYNKpbunT
  * @donate https://www.paypal.com/paypalme/Sheiylanie
  * @website https://revgames.tech/
@@ -18,7 +18,7 @@ class ChannelsBadges {
     constructor(meta) {
         this.meta = meta;
         this.CBsettings = {
-            version: "1.1.6",
+            version: "1.1.7",
             voice: { voice: true, text: true, emoji: true, voice_color: "#1ABC9C" },
             forum: { forum: true, text: true, emoji: true, forum_color: "#206694" },
             nsfw: { nsfw: true, text: true, emoji: true, nsfw_color: "#F23F42" },
@@ -160,9 +160,9 @@ class ChannelsBadges {
         const previousVersion = BdApi.Data.load(this.meta.name, "CBsettings").version;
         const ModalComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("ModalRoot"));
         const ModalActions = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("openModal", "updateModal"));
-        const changelogsTitle = 'Fix Logs';
+        const changelogsTitle = 'Update';
         const changelogs = [
-            `Delete: console.log("AddtagChannels");`,
+            `iconBase-2G48Fc >  iconBase_de0cd6`,
         ];
         if (sys) {
             if (previousVersion && currentVersion !== previousVersion) this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs, changelogsTitle);
@@ -439,7 +439,7 @@ class ChannelsBadges {
                 const isSecureTag = tag.secureTag && svgHTML.includes(tag.secureTag);
                 let tagElementHtml;
                 const tagElement = document.createElement('div');
-                tagElement.className = `${tag.className} iconBase-2G48Fc`;
+                tagElement.className = `${tag.className} iconBase_de0cd6`;
                 const emoji = isSecureTag ? tag.secureEmoji : tag.icon;
                 if (isSvgContainsTag && !isAlreadyTag && isTagEnabled) {
                     if (this.CBsettings[tag.setting][tag.setting]) {

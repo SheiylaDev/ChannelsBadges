@@ -14,6 +14,9 @@ Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
 
 ## Changelog
 
+### 🕙 1.1.7
+- ☑️ Update: iconBase-2G48Fc >  iconBase_de0cd6.
+
 ### 🕙 1.1.6
 - ☑️ Delete: console.log("AddtagChannels");
 

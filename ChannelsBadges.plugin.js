@@ -3,10 +3,10 @@
  * @author Sheiylanie
  * @authorId 183948625368317952
  * @description Add Voice | Forum | Nsfw | Rule | Ads badges to channels.
- * @version 1.1.7
+ * @version 1.1.8
  * @invite GWYNKpbunT
  * @donate https://www.paypal.com/paypalme/Sheiylanie
- * @website https://revgames.tech/
+ * @website https://novarise-studio.com
  * @source https://github.com/SheiylaDev/ChannelsBadges/blob/main/ChannelsBadges.plugin.js
  * @updateUrl https://raw.githubusercontent.com/SheiylaDev/ChannelsBadges/main/ChannelsBadges.plugin.js
  */
@@ -18,7 +18,7 @@ class ChannelsBadges {
     constructor(meta) {
         this.meta = meta;
         this.CBsettings = {
-            version: "1.1.7",
+            version: "1.1.8",
             voice: { voice: true, text: true, emoji: true, voice_color: "#1ABC9C" },
             forum: { forum: true, text: true, emoji: true, forum_color: "#206694" },
             nsfw: { nsfw: true, text: true, emoji: true, nsfw_color: "#F23F42" },
@@ -101,74 +101,11 @@ class ChannelsBadges {
     }
 
     /**
-     * Displays a modal with the current version and changelogs.
-     * @param {string} currentVersion - The current version of the plugin.
-     * @param {object} ModalComponents - The components used to create the modal.
-     * @param {object} ModalActions - The actions used to open and close the modal.
-     * @param {string[]} changelogs - An array of strings representing the changelogs.
-     * @param {string} changelogsTitle - The title of the changelogs section.
-     */
-    modalVersion(currentVersion, ModalComponents, ModalActions, changelogs, changelogsTitle) {
-        const MyModal = (closeCallback) => {
-            return BdApi.React.createElement(ModalComponents.ModalRoot, {
-                transitionState: 1,
-                size: 'small',
-                children: [
-                    BdApi.React.createElement('div', { className: 'channelsBadges_v_Header' }, [
-                        BdApi.React.createElement('div', { className: 'channelsBadges_v_FlexChild' }, [
-                            BdApi.React.createElement('h1', { className: 'channelsBadges_v_Header_Title', children: `${this.meta.name}` }),
-                            BdApi.React.createElement('div', { className: 'channelsBadges_v_Header_Version', children: `Version ${currentVersion}` }),
-                        ]),
-                        BdApi.React.createElement('button', { 'aria-label': 'Close', type: 'button', className: 'channelsBadges_v_FlexChild channelsBadges_v_Button', onClick: closeCallback }, [
-                            BdApi.React.createElement('div', { className: '' }, [
-                                BdApi.React.createElement('svg', { 'aria-hidden': 'true', role: 'img', className: '', width: '24', height: '24', viewBox: '0 0 24 24' }, [
-                                    BdApi.React.createElement('path', { fill: 'currentColor', d: 'M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z' }),
-                                ]),
-                            ]),
-                        ]),
-                    ]),
-                    BdApi.React.createElement('div', { className: 'content__96073 thin_b1c063' }, [
-                        BdApi.React.createElement('div', { tabindex: 0, role: 'region' }, [
-                            BdApi.React.createElement('h2', { className: 'channelsBadges_v_Map' }, [BdApi.React.createElement('span', { children: `${changelogsTitle}` })]),
-                            BdApi.React.createElement('ul', { className: 'channelsBadges_v_Map_ul' }, [changelogs.map((log, index) => (BdApi.React.createElement('li', { key: index }, log.trim())))]),
-                        ]),
-                    ]),
-                    BdApi.React.createElement('div', { className: 'channelsBadges_v_Footer', style: { flex: '0 0 auto' } }, [
-                        BdApi.React.createElement('div', null, [
-                            BdApi.React.createElement('a', { href: 'https://www.paypal.me/Sheiylanie', rel: 'noreferrer noopener', target: '_blank' }, [
-                                BdApi.React.createElement('svg', { name: 'PayPal', width: '16', height: '16', viewBox: '0 0 24 24' }, [
-                                    BdApi.React.createElement('path', { fill: 'currentColor', d: 'M 5.6863929,0 C 5.1806043,0 4.7507198,0.3656279 4.6704813,0.85995389 L 1.6795909,19.673995 c -0.058746,0.371103 0.2309887,0.706911 0.6092555,0.706911 h 4.4338638 l 1.1121097,-7.006437 -0.033522,0.22009 c 0.078805,-0.494326 0.5072079,-0.859954 1.0129965,-0.859954 h 2.1061586 c 4.139443,0 7.378419,-1.667588 8.325519,-6.4919233 0.02866,-0.1432829 0.07434,-0.4183163 0.07434,-0.4183163 C 19.589638,4.0390606 19.318112,2.8290903 18.345211,1.7301106 17.276361,0.5193702 15.342278,0 12.867737,0 Z M 21.516831,7.8139196 c -1.028771,4.7498274 -4.3124,7.2629664 -9.522166,7.2629664 H 10.107139 L 8.6962314,24 H 11.76 c 0.442744,0 0.820329,-0.319405 0.889104,-0.753552 l 0.03498,-0.189482 0.705454,-4.428033 0.04519,-0.244868 c 0.06878,-0.434148 0.446338,-0.753554 0.887649,-0.753554 h 0.559699 c 3.620757,0 6.455196,-1.457472 7.283371,-5.677153 0.332416,-1.693603 0.172401,-3.113533 -0.64861,-4.1394384 z' })
-                                ]),
-                            ]),
-                            BdApi.React.createElement('div', { className: 'channelsBadges_v_Footer_Title', children: `Support me for more updates !` }),
-                        ]),
-                    ]),
-                ]
-            });
-        };
-        ModalActions.openModal((props) => { return MyModal(props.onClose); });
-        this.CBsettings['version'] = currentVersion;
-        BdApi.Data.save(this.meta.name, "CBsettings", this.CBsettings);
-    }
-
-    /**
-     * Checks the version of the plugin and displays a modal with the changelog if there is a new version available.
+     * Vérifie la version du plugin et affiche la modale de changelog si besoin.
      * @param {boolean} sys - Whether the check is being triggered by the system or manually by the user.
      */
     checkVersion(sys) {
-        const currentVersion = this.meta.version;
-        const previousVersion = BdApi.Data.load(this.meta.name, "CBsettings").version;
-        const ModalComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("ModalRoot"));
-        const ModalActions = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("openModal", "updateModal"));
-        const changelogsTitle = 'Update';
-        const changelogs = [
-            `iconBase-2G48Fc >  iconBase_de0cd6`,
-        ];
-        if (sys) {
-            if (previousVersion && currentVersion !== previousVersion) this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs, changelogsTitle);
-        } else {
-            this.modalVersion(currentVersion, ModalComponents, ModalActions, changelogs, changelogsTitle);
-        }
+        // Suppression de la modale changelog, la fonction ne fait plus rien
     }
 
     /**
@@ -426,12 +363,12 @@ class ChannelsBadges {
                 element.parentNode.removeChild(element);
             });
         });
-        const channelListItems = document.querySelectorAll('.containerDefault__3187b');
+        const channelListItems = document.querySelectorAll('.containerDefault_c69b6d');
         channelListItems.forEach(item => {
             const svgElement = item.querySelector('svg'); 
             if (!svgElement) return;
             const svgHTML = svgElement.innerHTML;
-            const channelChildrenElement = item.querySelector('.children_a486f8'); if (!channelChildrenElement) return;
+            const channelChildrenElement = item.querySelector('[class^="children_"]'); if (!channelChildrenElement) return;
             this.BadgeListes.forEach(tag => {
                 const isAlreadyTag = item.querySelector(`.${tag.className}`);
                 const isSvgContainsTag = tag.svgContent.some(content => svgHTML.includes(content));
@@ -468,7 +405,7 @@ class ChannelsBadges {
     setupObserver() {
         this.observer = new MutationObserver((mutationsList, observer) => {
             for (let mutation of mutationsList) {
-                if (mutation.addedNodes && mutation.addedNodes.length > 0 && mutation.addedNodes[0].classList && (mutation.addedNodes[0].classList.contains('listItem_fa7b36') || mutation.addedNodes[0].classList.contains('containerDefault__3187b'))) {
+                if (mutation.addedNodes && mutation.addedNodes.length > 0 && mutation.addedNodes[0].classList && (mutation.addedNodes[0].classList.contains('listItem_fa7b36') || mutation.addedNodes[0].classList.contains('containerDefault_c69b6d'))) {
                     this.AddtagChannels();
                 }
             }
